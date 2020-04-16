@@ -10,7 +10,9 @@ public class Dfa {
     private final List<String> alphabet;
 
     public Dfa(List<String> states, String startState, List<String> finalStates, List<Transition> transitions, List<String> alphabet) {
-
+        if ( states.isEmpty() || startState==null || transitions.isEmpty() || alphabet.isEmpty()) {
+            throw new AssertionError("Invalid DFA received");
+        }
         this.states = states;
         this.startState = startState;
         this.finalStates = finalStates;
