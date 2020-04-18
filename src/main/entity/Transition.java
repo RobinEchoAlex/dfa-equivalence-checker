@@ -11,6 +11,18 @@ public class Transition {
         this.endState = endState;
     }
 
+    public String getStartState() {
+        return startState;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public String getEndState() {
+        return endState;
+    }
+
     @Override
     public String toString() {
         return endState;

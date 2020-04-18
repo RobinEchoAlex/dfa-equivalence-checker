@@ -18,14 +18,17 @@ public class Main {
         Main main = new Main();
         Dfa dfa1;
         Dfa dfa2;
+        DfaAlgorithm dfaAlgorithm = new DfaAlgorithm();
 
-        if (args.length == 3) {
+        if (args[0].startsWith("-")) {
             dfa1 = main.readDfa(args[1]);
             switch (args[0]) {
                 case "-complementation":
+                    main.printDfaOnScreen(dfaAlgorithm.complementationComputation(dfa1));
                     break;
                 case "-intersection":
                     dfa2 = main.readDfa(args[2]);
+                    main.printDfaOnScreen(dfaAlgorithm.intersectionComputation(dfa1, dfa2));
                     break;
                 case "-sd":
                     dfa2 = main.readDfa(args[2]);
