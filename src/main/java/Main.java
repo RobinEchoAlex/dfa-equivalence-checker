@@ -1,13 +1,12 @@
 package main.java;
 
 import main.entity.Dfa;
+import main.entity.State;
 import main.entity.Transition;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -32,12 +31,23 @@ public class Main {
                     break;
                 case "-sd":
                     dfa2 = main.readDfa(args[2]);
+                    main.printDfaOnScreen(dfaAlgorithm.symmetricDifference(dfa1, dfa2));
                     break;
                 case "-emptyness":
+                    if (dfaAlgorithm.emptinessVerification(dfa1)) {
+                        System.out.println("language empty");
+                    } else {
+                        System.out.println("language non-empty");
+                    }
                     break;
                 case "-equivalence":
                     dfa2 = main.readDfa(args[2]);
-                    main.printDfaOnScreen(dfa1);
+                    if (dfaAlgorithm.equivalence(dfa1, dfa2)) {
+                        System.out.println("equivalent");
+                    }else{
+                        System.out.println("not equivalent");
+                    }
+                        ;
                     break;
                 default:
                     System.out.println("Invalid parameters");
@@ -48,20 +58,23 @@ public class Main {
         }
     }
 
-    public Dfa readDfa(String filePath) {
+
+
+    public static Dfa readDfa(String filePath) {
         File file = new File(filePath);
 
         try {
             Scanner sc = new Scanner(file);
 
+            //Read states
             int numberOfStates = sc.nextInt();
-            List<String> states = new ArrayList<>();
+            List<State> states = new ArrayList<>();
             for (int i = 0; i < numberOfStates; i++) {
                 String stateName = sc.next();
-                states.add(stateName);
+                states.add(new State(stateName));
             }
 
-
+            //Read alphabets
             int numberOfAlphabet = sc.nextInt();
             List<String> alphabets = new ArrayList<>();
             for (int i = 0; i < numberOfAlphabet; i++) {
@@ -69,53 +82,70 @@ public class Main {
                 alphabets.add(alphabet);
             }
 
-            List<Transition> transitions = new ArrayList<>();
+            //Read transitions
             for (int i = 0; i < numberOfStates; i++) {
-                for (int j = 0; j< numberOfAlphabet; j++) {
-                    Transition transition = new Transition(states.get(i), alphabets.get(j), sc.next());
-                    transitions.add(transition);
+                State startState = states.get(i);
+                for (int j = 0; j < numberOfAlphabet; j++) {
+                    State finalState = Util.findState(states, sc.next());
+                    Transition transition = new Transition(startState, alphabets.get(j), finalState);
+                    startState.addTransition(transition);
                 }
             }
 
-            String startState = sc.next();
+            //Read start and final states
+            State startState = Util.findState(states, sc.next());
             int numberOfFinalStates = sc.nextInt();
-            List<String> finalStates = new ArrayList<>();
+            List<State> finalStates = new ArrayList<>();
             for (int i = 0; i < numberOfFinalStates; i++) {
-                finalStates.add(sc.next());
+                State finalState = Util.findState(states, sc.next());
+                finalStates.add(finalState);
             }
 
-            return new Dfa(states, startState, finalStates, transitions, alphabets);
+            return new Dfa(states, startState, finalStates, alphabets);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (InputMismatchException e) {
+            e.printStackTrace();
+            System.out.println("Invalid DFA file format for file " + filePath);
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+            System.out.println("The start state/end state doesn't match state list");
         }
         return null;
     }
 
-    public void printDfaOnScreen(Dfa dfa) {
+    public static void printDfaOnScreen(Dfa dfa) {
+        //Print state information
         System.out.println(dfa.getStates().size());
-        for (String s: dfa.getStates()) {
-            System.out.print(s+" ");
+        for (State s: dfa.getStates()) {
+            System.out.print(s.getId()+" ");
         }
         System.out.println();
 
+        //Print Alphabet information
         System.out.println(dfa.getAlphabet().size());
         for (String s: dfa.getAlphabet()) {
             System.out.print(s+" ");
         }
         System.out.println();
 
+        //Print transitions table
         for (int i =0 ;i<dfa.getStates().size();i++) {
             for (int j = 0; j< dfa.getAlphabet().size(); j++) {
-                System.out.print(dfa.getTransitions().get(i*dfa.getAlphabet().size()+j).toString()+ " ");
+                State transStartState = dfa.getStates().get(i);
+                System.out.print(transStartState.getTransitions().get(j).toString()+ " ");
             }
             System.out.println();
         }
 
-        System.out.println(dfa.getStartState());
+        //Print start state
+        System.out.println(dfa.getStartState().getId());
 
+        //Print final state
         System.out.println(dfa.getFinalStates().size());
-        for (String s: dfa.getFinalStates()) {
-            System.out.print(s+" ");
+        for (State s: dfa.getFinalStates()) {
+            System.out.print(s.getId()+" ");
         }
+        System.out.println();
     }
 }

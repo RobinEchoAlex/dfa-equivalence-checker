@@ -1,39 +1,32 @@
 package main.entity;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class Dfa {
-    private final List<String> states;
-    private final String startState;
-    private final List<String> finalStates;
-    private final List<Transition> transitions;
+    private final List<State> states;
+    private final State startState;
+    private final List<State> finalStates;
     private final List<String> alphabet;
 
-    public Dfa(List<String> states, String startState, List<String> finalStates, List<Transition> transitions, List<String> alphabet) {
-        if ( states.isEmpty() || startState==null || transitions.isEmpty() || alphabet.isEmpty()) {
-            throw new AssertionError("Invalid DFA received");
-        }
+    public Dfa(List<State> states, State startState, List<State> finalStates,List<String> alphabet) {
         this.states = states;
         this.startState = startState;
         this.finalStates = finalStates;
-        this.transitions = transitions;
         this.alphabet = alphabet;
     }
 
-    public List<String> getStates() {
+    public List<State> getStates() {
         return states;
     }
 
-    public String getStartState() {
+    public State getStartState() {
         return startState;
     }
 
-    public List<String> getFinalStates() {
+    public List<State> getFinalStates() {
         return finalStates;
-    }
-
-    public List<Transition> getTransitions() {
-        return transitions;
     }
 
     public List<String> getAlphabet() {

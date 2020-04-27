@@ -1,17 +1,17 @@
 package main.entity;
 
 public class Transition {
-    private final String startState;
+    private final State startState;
     private final String symbol;
-    private final String endState;
+    private final State endState;
 
-    public Transition(String startState,String symbol, String endState) {
+    public Transition(State startState,String symbol, State endState) {
         this.startState = startState;
         this.symbol = symbol;
         this.endState = endState;
     }
 
-    public String getStartState() {
+    public State getStartState() {
         return startState;
     }
 
@@ -19,12 +19,12 @@ public class Transition {
         return symbol;
     }
 
-    public String getEndState() {
+    public State getEndState() {
         return endState;
     }
 
     @Override
     public String toString() {
-        return endState;
+        return endState.getId();
     }
 }
