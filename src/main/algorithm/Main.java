@@ -1,4 +1,4 @@
-package main.java;
+package main.algorithm;
 
 import main.entity.Dfa;
 import main.entity.State;
@@ -10,7 +10,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        if (args.length != 2 && args.length!=3) {
+        if (args.length != 2 && args.length != 3) {
             System.out.println("Invalid parameters");
             System.exit(-1);
         }
@@ -23,18 +23,19 @@ public class Main {
             dfa1 = main.readDfa(args[1]);
             switch (args[0]) {
                 case "-complementation":
-                    main.printDfaOnScreen(dfaAlgorithm.complementationComputation(dfa1));
+                    printDfaOnScreen(dfaAlgorithm.complementationComputation(dfa1));
                     break;
                 case "-intersection":
                     dfa2 = main.readDfa(args[2]);
-                    main.printDfaOnScreen(dfaAlgorithm.intersectionComputation(dfa1, dfa2));
+                    printDfaOnScreen(dfaAlgorithm.intersectionComputation(dfa1, dfa2));
                     break;
                 case "-sd":
                     dfa2 = main.readDfa(args[2]);
-                    main.printDfaOnScreen(dfaAlgorithm.symmetricDifference(dfa1, dfa2));
+                    printDfaOnScreen(dfaAlgorithm.symmetricDifference(dfa1, dfa2));
                     break;
                 case "-emptyness":
-                    if (dfaAlgorithm.emptinessVerification(dfa1)) {
+                case "-emptiness":
+                    if (dfaAlgorithm.emptinessVerification(dfa1, DfaAlgorithm::printRoute)) {
                         System.out.println("language empty");
                     } else {
                         System.out.println("language non-empty");
@@ -44,21 +45,29 @@ public class Main {
                     dfa2 = main.readDfa(args[2]);
                     if (dfaAlgorithm.equivalence(dfa1, dfa2)) {
                         System.out.println("equivalent");
-                    }else{
+                    } else {
                         System.out.println("not equivalent");
                     }
-                        ;
                     break;
                 default:
                     System.out.println("Invalid parameters");
+                    printInstruction();
             }
         } else {
-            dfa1 = main.readDfa(args[0]);
-            dfa2 = main.readDfa(args[1]);
+            printInstruction();
         }
     }
 
-
+    private static void printInstruction() {
+        String information = "usage: -option file1 [file2] \n" +
+                "options include: \n" +
+                " -complementation \n" +
+                " -intersection \n" +
+                " -sd \n"+
+                " -emptyness \n" +
+                " -equivalence ";
+        System.out.println(information);
+    }
 
     public static Dfa readDfa(String filePath) {
         File file = new File(filePath);
@@ -117,23 +126,23 @@ public class Main {
     public static void printDfaOnScreen(Dfa dfa) {
         //Print state information
         System.out.println(dfa.getStates().size());
-        for (State s: dfa.getStates()) {
-            System.out.print(s.getId()+" ");
+        for (State s : dfa.getStates()) {
+            System.out.print(s.getId() + " ");
         }
         System.out.println();
 
         //Print Alphabet information
         System.out.println(dfa.getAlphabet().size());
-        for (String s: dfa.getAlphabet()) {
-            System.out.print(s+" ");
+        for (String s : dfa.getAlphabet()) {
+            System.out.print(s + " ");
         }
         System.out.println();
 
         //Print transitions table
-        for (int i =0 ;i<dfa.getStates().size();i++) {
-            for (int j = 0; j< dfa.getAlphabet().size(); j++) {
+        for (int i = 0; i < dfa.getStates().size(); i++) {
+            for (int j = 0; j < dfa.getAlphabet().size(); j++) {
                 State transStartState = dfa.getStates().get(i);
-                System.out.print(transStartState.getTransitions().get(j).toString()+ " ");
+                System.out.print(transStartState.getTransitions().get(j).toString() + " ");
             }
             System.out.println();
         }
@@ -143,8 +152,8 @@ public class Main {
 
         //Print final state
         System.out.println(dfa.getFinalStates().size());
-        for (State s: dfa.getFinalStates()) {
-            System.out.print(s.getId()+" ");
+        for (State s : dfa.getFinalStates()) {
+            System.out.print(s.getId() + " ");
         }
         System.out.println();
     }

@@ -1,4 +1,4 @@
-package main.java;
+package main.algorithm;
 
 import main.entity.Dfa;
 import main.entity.State;
@@ -6,12 +6,13 @@ import main.entity.Transition;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static main.java.Util.findState;
+import static main.algorithm.Util.findState;
 
 public class DfaAlgorithm {
+    private boolean isEmptiness =true;
 
     public Dfa complementationComputation(final Dfa dfa) {
         List<State> finalStates = dfa.getStates().stream().filter(
@@ -70,7 +71,7 @@ public class DfaAlgorithm {
 
         //TODO alphabet sequence problem analysis
         Dfa dfa = new Dfa(states, startStates, finalStates, dfa1.getAlphabet());
-        Main.printDfaOnScreen(dfa);
+        //Main.printDfaOnScreen(dfa);
         return dfa;
     }
 
@@ -121,7 +122,7 @@ public class DfaAlgorithm {
             }
         }
         Dfa dfa = new Dfa(states, startStates, finalStates, dfa1.getAlphabet());
-        Main.printDfaOnScreen(dfa);
+        //Main.printDfaOnScreen(dfa);
         return dfa;
     }
 
@@ -131,48 +132,63 @@ public class DfaAlgorithm {
                 intersectionComputation(complementationComputation(dfa1),dfa2),
                 intersectionComputation(dfa1,complementationComputation(dfa2))
         );
-
-
     }
 
     /**
-     *
+     * Ver
      * @param dfa
      * @return true if L(M) is empty set.
      */
-    public boolean emptinessVerification(Dfa dfa) {
-        boolean visited[] = new boolean[dfa.getStates().size()];
-        Stack<State> statesToGo = new Stack<>();
-        statesToGo.push(dfa.getStartState());
-
-        while (!statesToGo.isEmpty()) {
-            State state = statesToGo.pop();
-            visited[dfa.getStates().indexOf(state)] = true;
-
-            for (Transition trans : state.getTransitions()) {
-                State endState = trans.getEndState();
-                //It is the end state
-                if (dfa.getFinalStates().contains(endState)) {
-                    System.out.println("end stae");
-                    System.out.println(endState.getId());
-                    System.out.println("current st");
-                    System.out.println(state.getId());
-                    return false;
-                }
-
-                if (!visited[dfa.getStates().indexOf(endState)]) {
-                    statesToGo.push(endState);
-                }
-            }
+    public boolean emptinessVerification(Dfa dfa,Consumer<List<Transition>> actionWhenNoEmpty) {
+        if (dfa.getFinalStates().contains(dfa.getStartState())) {
+            actionWhenNoEmpty.accept(null);
+            return false;
         }
-        return true;
+
+        boolean[] visited = new boolean[dfa.getStates().size()];
+        List<Transition> path = new ArrayList<>();
+        dfsRecursion(dfa,dfa.getStartState(), visited, path, actionWhenNoEmpty);
+        return isEmptiness;
     }
 
-    private void dfsRecrusion(State currentState,boolean isVisited[],List<Integer> path) {
+    private void dfsRecursion(Dfa dfa, State currentState, boolean[] isVisited, List<Transition> path, Consumer<List<Transition>> actionWhenNoEmpty) {
+        isVisited[dfa.getStates().indexOf(currentState)] = true;
 
+        //It is the end state
+        if (dfa.getFinalStates().contains(currentState)) {
+            isEmptiness = false;
+            actionWhenNoEmpty.accept(path);
+        }
+
+        for (Transition trans : currentState.getTransitions()) {
+            State endState = trans.getEndState();
+            if (!isVisited[dfa.getStates().indexOf(endState)]) {
+                path.add(trans);
+                dfsRecursion(dfa, endState, isVisited, path, actionWhenNoEmpty);
+                path.remove(trans);
+            }
+        }
     }
 
     public boolean equivalence(Dfa dfa1, Dfa dfa2) {
-        return emptinessVerification(symmetricDifference(dfa1, dfa2));
+        //TODO if the alphabet is not equal, return immediately
+        return emptinessVerification(symmetricDifference(dfa1, dfa2), DfaAlgorithm::declareNonEquivalent);
+    }
+
+    public static void printRoute(List<Transition> path) {
+        System.out.print("language non-empty - ");
+        if (path == null) {
+            System.out.println("e");
+        }
+        else for (Transition transition: path) {
+            System.out.print(transition.getSymbol());
+        }
+        System.out.println(" accepted");
+        System.exit(0);
+    }
+
+    public static void declareNonEquivalent(List<Transition> path) {
+        System.out.println("not equivalent");
+        System.exit(0);
     }
 }
