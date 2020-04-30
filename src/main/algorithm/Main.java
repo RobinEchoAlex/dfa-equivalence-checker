@@ -14,23 +14,22 @@ public class Main {
             System.out.println("Invalid parameters");
             System.exit(-1);
         }
-        Main main = new Main();
         Dfa dfa1;
         Dfa dfa2;
         DfaAlgorithm dfaAlgorithm = new DfaAlgorithm();
 
         if (args[0].startsWith("-")) {
-            dfa1 = main.readDfa(args[1]);
-            switch (args[0]) {
+            dfa1 = readDfa(args[1]);
+            switch (args[0].toLowerCase()) {
                 case "-complementation":
                     printDfaOnScreen(dfaAlgorithm.complementationComputation(dfa1));
                     break;
                 case "-intersection":
-                    dfa2 = main.readDfa(args[2]);
+                    dfa2 = readDfa(args[2]);
                     printDfaOnScreen(dfaAlgorithm.intersectionComputation(dfa1, dfa2));
                     break;
                 case "-sd":
-                    dfa2 = main.readDfa(args[2]);
+                    dfa2 = readDfa(args[2]);
                     printDfaOnScreen(dfaAlgorithm.symmetricDifference(dfa1, dfa2));
                     break;
                 case "-emptyness":
@@ -42,7 +41,7 @@ public class Main {
                     }
                     break;
                 case "-equivalence":
-                    dfa2 = main.readDfa(args[2]);
+                    dfa2 = readDfa(args[2]);
                     if (dfaAlgorithm.equivalence(dfa1, dfa2)) {
                         System.out.println("equivalent");
                     } else {
@@ -95,18 +94,18 @@ public class Main {
             for (int i = 0; i < numberOfStates; i++) {
                 State startState = states.get(i);
                 for (int j = 0; j < numberOfAlphabet; j++) {
-                    State finalState = Util.findState(states, sc.next());
+                    State finalState = Util.findStateById(states, sc.next());
                     Transition transition = new Transition(startState, alphabets.get(j), finalState);
                     startState.addTransition(transition);
                 }
             }
 
             //Read start and final states
-            State startState = Util.findState(states, sc.next());
+            State startState = Util.findStateById(states, sc.next());
             int numberOfFinalStates = sc.nextInt();
             List<State> finalStates = new ArrayList<>();
             for (int i = 0; i < numberOfFinalStates; i++) {
-                State finalState = Util.findState(states, sc.next());
+                State finalState = Util.findStateById(states, sc.next());
                 finalStates.add(finalState);
             }
 
@@ -150,7 +149,7 @@ public class Main {
         //Print start state
         System.out.println(dfa.getStartState().getId());
 
-        //Print final state
+        //Print final states
         System.out.println(dfa.getFinalStates().size());
         for (State s : dfa.getFinalStates()) {
             System.out.print(s.getId() + " ");
