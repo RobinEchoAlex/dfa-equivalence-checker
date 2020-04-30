@@ -13,6 +13,6 @@ public class Util {
      * @return the state object
      */
     public static State findStateById(List<State> states, String ID) {
-        return states.stream().filter(state -> state.getId().equals(ID)).findFirst().orElseThrow();
+        return states.stream().filter(state -> state.getId().equals(ID)).findFirst().orElseThrow(RuntimeException::new);
     }
 }

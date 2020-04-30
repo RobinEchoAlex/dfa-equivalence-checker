@@ -12,6 +12,7 @@ public class Main {
     public static void main(String[] args) {
         if (args.length != 2 && args.length != 3) {
             System.out.println("Invalid parameters");
+            printInstruction();
             System.exit(-1);
         }
         Dfa dfa1;
