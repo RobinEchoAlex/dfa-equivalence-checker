@@ -11,7 +11,7 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         if (args.length != 2 && args.length != 3) {
-            System.out.println("Invalid parameters");
+            System.out.println("Invalid parameters.");
             printInstruction();
             System.exit(-1);
         }
@@ -69,6 +69,11 @@ public class Main {
         System.out.println(information);
     }
 
+    /**
+     * Read a DFA encoding from a txt file.
+     * @param filePath the file path of the txt file
+     * @return the deciphered DFA
+     */
     public static Dfa readDfa(String filePath) {
         File file = new File(filePath);
 
@@ -123,6 +128,10 @@ public class Main {
         return null;
     }
 
+    /**
+     * Print the encoding of a given DFA on the console.
+     * @param dfa the DFA to be printed
+     */
     public static void printDfaOnScreen(Dfa dfa) {
         //Print state information
         System.out.println(dfa.getStates().size());

@@ -240,7 +240,7 @@ public class DfaAlgorithm {
     public static void printRoute(List<Transition> path) {
         System.out.print("language non-empty - ");
         if (path == null) {
-            System.out.println("e");
+            System.out.print("e");
         }
         else for (Transition transition: path) {
             System.out.print(transition.getSymbol());
