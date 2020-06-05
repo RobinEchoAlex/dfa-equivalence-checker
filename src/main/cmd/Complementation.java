@@ -3,8 +3,8 @@ package main.cmd;
 import main.algorithm.DfaAlgorithm;
 import main.entity.Dfa;
 
-import static main.algorithm.Main.printDfaOnScreen;
-import static main.algorithm.Main.readDfa;
+import static main.algorithm.CommandLineIo.printDfaOnScreen;
+import static main.algorithm.CommandLineIo.readDfa;
 
 public class Complementation {
     public static void main(String[] args) {

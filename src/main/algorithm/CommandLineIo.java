@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class Main {
+public class CommandLineIo {
     public static void main(String[] args) {
         if (args.length != 2 && args.length != 3) {
             System.out.println("Invalid parameters.");

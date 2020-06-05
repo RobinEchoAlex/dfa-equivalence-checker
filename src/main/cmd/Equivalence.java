@@ -1,10 +1,10 @@
 package main.cmd;
 
 import main.algorithm.DfaAlgorithm;
-import main.algorithm.Main;
+import main.algorithm.CommandLineIo;
 import main.entity.Dfa;
 
-import static main.algorithm.Main.readDfa;
+import static main.algorithm.CommandLineIo.readDfa;
 
 public class Equivalence {
     public static void main(String[] args) {
@@ -18,7 +18,7 @@ public class Equivalence {
         DfaAlgorithm dfaAlgorithm = new DfaAlgorithm();
         dfa1 = readDfa(args[0]);
         dfa2 = readDfa(args[1]);
-        Main.checkAlphabetEquivalence(dfa1,dfa2);
+        CommandLineIo.checkAlphabetEquivalence(dfa1,dfa2);
         if (dfaAlgorithm.equivalence(dfa1, dfa2)) {
             System.out.println("equivalent");
         } else {
