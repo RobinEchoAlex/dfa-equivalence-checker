@@ -5,6 +5,7 @@ import main.entity.State;
 import main.entity.Transition;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -13,6 +14,24 @@ import static main.algorithm.Util.findStateById;
 
 public class DfaAlgorithm {
     private boolean isEmptiness =true;
+
+    public static boolean isAlphabetEquivalent(Dfa dfa1, Dfa dfa2) {
+        List<String> alphabet1 = dfa1.getAlphabet();
+        List<String> alphabet2 = dfa2.getAlphabet();
+
+        if (alphabet1 == null || alphabet2 == null) {
+            return false;
+        }
+
+        //Create new array to prevent messing the original order
+        List<String> copy1 = new ArrayList<>(alphabet1);
+        List<String> copy2 = new ArrayList<>(alphabet2);
+
+        Collections.sort(copy1);
+        Collections.sort(copy2);
+
+        return copy1.equals(copy2);
+    }
 
     /**
      * Derive the complementation of a given DFA.

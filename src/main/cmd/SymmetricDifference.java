@@ -1,6 +1,7 @@
 package main.cmd;
 
 import main.algorithm.DfaAlgorithm;
+import main.algorithm.Main;
 import main.entity.Dfa;
 
 import static main.algorithm.Main.printDfaOnScreen;
@@ -18,6 +19,7 @@ public class SymmetricDifference {
         DfaAlgorithm dfaAlgorithm = new DfaAlgorithm();
         dfa1 = readDfa(args[0]);
         dfa2 = readDfa(args[1]);
+        Main.checkAlphabetEquivalence(dfa1,dfa2);
         printDfaOnScreen(dfaAlgorithm.symmetricDifference(dfa1, dfa2));
     }
 

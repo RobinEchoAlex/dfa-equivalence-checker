@@ -27,10 +27,12 @@ public class Main {
                     break;
                 case "-intersection":
                     dfa2 = readDfa(args[2]);
+                    checkAlphabetEquivalence(dfa1,dfa2);
                     printDfaOnScreen(dfaAlgorithm.intersectionComputation(dfa1, dfa2));
                     break;
                 case "-sd":
                     dfa2 = readDfa(args[2]);
+                    checkAlphabetEquivalence(dfa1,dfa2);
                     printDfaOnScreen(dfaAlgorithm.symmetricDifference(dfa1, dfa2));
                     break;
                 case "-emptyness":
@@ -43,6 +45,7 @@ public class Main {
                     break;
                 case "-equivalence":
                     dfa2 = readDfa(args[2]);
+                    checkAlphabetEquivalence(dfa1,dfa2);
                     if (dfaAlgorithm.equivalence(dfa1, dfa2)) {
                         System.out.println("equivalent");
                     } else {
@@ -55,6 +58,13 @@ public class Main {
             }
         } else {
             printInstruction();
+        }
+    }
+
+    public static void checkAlphabetEquivalence(Dfa dfa1, Dfa dfa2) {
+        if (!DfaAlgorithm.isAlphabetEquivalent(dfa1, dfa2)) {
+            System.out.println("The alphabet of two DFA are not equivalent");
+            System.exit(1);
         }
     }
 
